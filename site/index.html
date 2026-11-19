@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bechtle-Merch 3D-Druck</title>
+<meta name="description" content="Neun Merch-Entwürfe mit Bechtle-Bezug, in Fusion per Python modelliert und mehrfarbig für den 3D-Druck vorbereitet.">
+<meta property="og:title" content="Bechtle-Merch 3D-Druck">
+<meta property="og:description" content="Neun Merch-Entwürfe, in Fusion per Python modelliert und mehrfarbig für den 3D-Druck vorbereitet.">
+<meta property="og:image" content="img/zahnrad_logo.png">
+<style>
+:root {
+  --bg: #F4F6F8; --surface: #FFFFFF; --ink: #0E1B2A; --muted: #566577; --line: #D9E0E7;
+  --accent: #075033; --mid: #23A96A; --stage: #EEF1F4; --focus: #1A73E8;
+  --font: "Segoe UI", system-ui, -apple-system, sans-serif; --mono: ui-monospace, Consolas, "Cascadia Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0C141D; --surface: #121D29; --ink: #E7EDF3; --muted: #9AAABB; --line: #24313F; --accent: #5BD39A; --mid: #3CCB74; --stage: #E9EDF1; --focus: #8AB4F8; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #0C141D; --surface: #121D29; --ink: #E7EDF3; --muted: #9AAABB; --line: #24313F; --accent: #5BD39A; --mid: #3CCB74; --stage: #E9EDF1; --focus: #8AB4F8; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--font); padding: 0 16px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-block: 40px 56px; display: grid; gap: 32px; }
+header { display: grid; gap: 14px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { font-size: clamp(30px, 5.5vw, 46px); line-height: 1.06; margin: 0; font-weight: 650; text-wrap: balance; }
+.lead { max-width: 66ch; color: var(--muted); margin: 0; font-size: 16px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
+.facts li { font-family: var(--mono); font-size: 12.5px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 20px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+.stage { background: var(--stage); aspect-ratio: 16 / 11; display: grid; place-items: center; }
+.stage img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.body { padding: 14px 16px 16px; display: grid; gap: 10px; align-content: start; }
+.views { display: flex; gap: 6px; flex-wrap: wrap; }
+.views button { font: 12px var(--font); color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+.views button[aria-pressed="true"] { color: var(--ink); border-color: var(--mid); background: color-mix(in srgb, var(--mid) 12%, transparent); }
+.views button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+h2 { font-size: 19px; line-height: 1.2; margin: 0; font-weight: 650; }
+.desc { margin: 0; font-size: 14px; }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; font-size: 12.5px; color: var(--muted); }
+.meta .mass { font-family: var(--mono); }
+.sw { display: inline-flex; gap: 4px; }
+.sw i { width: 13px; height: 13px; border-radius: 4px; border: 1px solid var(--line); display: inline-block; }
+.how { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 16px; }
+.how div { border-top: 2px solid var(--mid); padding-top: 10px; font-size: 14px; color: var(--muted); }
+.how b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 2px; }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; display: grid; gap: 6px; }
+footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">3D-Druck · Fusion · Bambu Studio</div>
+    <h1>Bechtle-Merch aus dem 3D-Drucker</h1>
+    <p class="lead">Neun Entwürfe für Schreibtisch und Schlüsselbund, komplett per Python-Skript in Fusion modelliert. Alle Farben liegen bündig eingelegt, gedruckt wird mehrfarbig ohne Stützen. Jedes Modell gibt es mit Logo und als neutrale Fassung.</p>
+    <ul class="facts">
+      <li>9 Modelle</li><li>2 Fassungen je Modell</li><li>FDM, Düse 0,4 / 0,2 mm</li><li>Mehrfarbig per AMS</li>
+    </ul>
+  </header>
+
+  <main class="grid" id="grid"></main>
+
+  <section class="how" aria-label="Arbeitsweise">
+    <div><b>Parametrisch modelliert</b>Jedes Teil ist ein Python-Skript für die Fusion-API. Maße, Texte und Farben sind Parameter, Varianten entstehen per Schleife.</div>
+    <div><b>Farben als Einlagen</b>Schrift und Grafik liegen 0,6 bis 1 mm tief im Körper, auf das Schichtraster abgestimmt. So bleibt die Oberfläche plan.</div>
+    <div><b>Druckfertig exportiert</b>Ein Skript baut Bambu-Studio-Projekte mit fest zugeordneten Filamenten und einer Platte je Kategorie. Die Slicer-Einstellungen sind am Drucker abgestimmt.</div>
+  </section>
+
+  <footer>
+    <span>Private Entwürfe, kein offizielles Produkt der Bechtle AG. Name und Logo gehören ihren Inhabern.</span>
+    <span>Mehr Projekte im <a href="https://tschortsch3711.github.io/portfolio/">Portfolio</a>.</span>
+  </footer>
+</div>
+<script>
+const FARBE = { weiss: '#F3F3EF', dunkel: '#075033', mittel: '#23A96A', neon: '#2FFB95', anthrazit: '#2B3442', schwarz: '#181818' };
+const NAME = { weiss: 'Weiß', dunkel: 'Experience Green', mittel: 'Progressive Green', neon: 'Future Green', anthrazit: 'Anthrazit', schwarz: 'Schwarz' };
+const MODELLE = [
+  { name: 'Token mit Schlüsselring', text: 'Münze mit Emblem vorn und einem von fünf Motiven hinten, wahlweise mit Loch für den Schlüsselring.',
+    mass: 'Ø 40 × 3 mm', farben: ['weiss', 'dunkel', 'mittel'],
+    bilder: [['token_logo_seit2004_loch', 'Vorn'], ['token_logo_always_loch_rueckseite', 'Rückseite'], ['token_neutral_zusammen', 'Neutral']] },
+  { name: 'Einkaufswagenchips', text: 'Im Maß der 1-Euro-Münze, beidseitig bedruckt. Vier Farbwelten aus derselben Geometrie.',
+    mass: 'Ø 23,25 × 2,4 mm', farben: ['weiss', 'dunkel', 'mittel', 'neon'],
+    bilder: [['chip_logo_seit2004', 'Vorn'], ['chip_logo_zusammen_rueckseite', 'Rückseite'], ['chip_neutral_zusammen', 'Neutral']] },
+  { name: 'Uptime-Untersetzer', text: 'Prompt, große Uptime-Zahl und Pulslinie, alles bündig, damit das Glas plan steht.',
+    mass: 'Ø 95 × 4 mm', farben: ['dunkel', 'weiss', 'neon', 'mittel'],
+    bilder: [['untersetzer_logo_oben', 'Oben'], ['untersetzer_logo', 'Schräg'], ['untersetzer_neutral_oben', 'Neutral']] },
+  { name: 'Handyständer „On Call“', text: 'Ein Teil, 70 Grad Lehne, Nut für Handys mit Hülle. Vorn „ON CALL“ mit Statuspunkt.',
+    mass: '78 × 92 × 105 mm', farben: ['dunkel', 'weiss', 'neon'],
+    bilder: [['handystaender_logo_leer', 'Schräg'], ['handystaender_logo', 'Mit Handy'], ['handystaender_neutral', 'Neutral']] },
+  { name: 'Deploy-Würfel', text: 'Entscheidungswürfel fürs Team: SHIP IT, ROLLBACK, REBOOT, TESTEN, TICKET.',
+    mass: '30 × 30 × 30 mm', farben: ['weiss', 'dunkel', 'neon', 'mittel'],
+    bilder: [['wuerfel_logo', 'Schräg'], ['wuerfel_logo_hinten', 'Rückseiten'], ['wuerfel_neutral_unten', 'Neutral']] },
+  { name: 'HE-Lineal', text: 'Misst Höheneinheiten im 19-Zoll-Raster, unten Zentimeter bis 15.',
+    mass: '164 × 36 × 2,4 mm', farben: ['weiss', 'dunkel', 'mittel'],
+    bilder: [['lineal_logo_oben', 'Oben'], ['lineal_logo', 'Schräg'], ['lineal_neutral_oben', 'Neutral']] },
+  { name: 'Rack-Stiftehalter', text: 'Stiftehalter im Server-Look mit drei Fächern und einrastender Wechselblende.',
+    mass: '84 × 64 × 100 mm', farben: ['anthrazit', 'schwarz', 'mittel', 'neon', 'weiss'],
+    bilder: [['stiftehalter_logo', 'Schräg'], ['stiftehalter_logo_vorn', 'Vorn'], ['stiftehalter_neutral', 'Neutral']] },
+  { name: 'Drehzähler „Stabiler Betrieb“', text: 'Drei Ziffernwalzen wie beim Kilometerzähler, mit dem Daumen gedreht, jede rastet in zehn Stellungen.',
+    mass: '150 × 58 × 56 mm', farben: ['mittel', 'dunkel', 'weiss'],
+    bilder: [['drehzaehler_logo', 'Schräg'], ['drehzaehler_logo_vorn', 'Vorn'], ['drehzaehler_neutral', 'Neutral']] },
+  { name: 'Zahnrad-Trio „Plan Build Run“', text: 'Drei Zahnräder mit Evolventenverzahnung, die auf der Grundplatte ineinandergreifen.',
+    mass: '124 × 52 × 11,4 mm', farben: ['dunkel', 'mittel', 'weiss', 'neon'],
+    bilder: [['zahnrad_logo', 'Schräg'], ['zahnrad_logo_oben', 'Oben'], ['zahnrad_neutral', 'Neutral']] },
+];
+function el(tag, attrs = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) { if (k === 'class') n.className = v; else if (k === 'text') n.textContent = v; else n.setAttribute(k, v); }
+  for (const k of kids) if (k) n.append(k);
+  return n;
+}
+const grid = document.getElementById('grid');
+for (const m of MODELLE) {
+  const img = el('img', { src: 'img/' + m.bilder[0][0] + '.png', alt: m.name + ', ' + m.bilder[0][1], width: '1600', height: '1100', loading: 'lazy' });
+  const views = el('div', { class: 'views', role: 'group', 'aria-label': 'Ansicht von ' + m.name });
+  m.bilder.forEach(([file, label], i) => {
+    const b = el('button', { type: 'button', 'aria-pressed': String(i === 0), text: label });
+    b.addEventListener('click', () => {
+      img.src = 'img/' + file + '.png'; img.alt = m.name + ', ' + label;
+      views.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    });
+    views.append(b);
+  });
+  const sw = el('span', { class: 'sw', title: m.farben.map((c) => NAME[c]).join(', ') });
+  for (const c of m.farben) { const i = el('i'); i.style.background = FARBE[c]; sw.append(i); }
+  const meta = el('div', { class: 'meta' }, el('span', { class: 'mass', text: m.mass }), sw);
+  grid.append(el('article', { class: 'card' }, el('div', { class: 'stage' }, img),
+    el('div', { class: 'body' }, el('h2', { text: m.name }), el('p', { class: 'desc', text: m.text }), meta, views)));
+}
+</script>
+</body>
+</html>

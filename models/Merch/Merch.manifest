@@ -1,0 +1,10 @@
+{
+  "autodeskProduct": "Fusion",
+  "type": "script",
+  "author": "tschortsch3711",
+  "description": {
+    "": "Baut die Merch-Modelle (Token, Chips, Untersetzer, Handystaender, Wuerfel, Lineal, Stiftehalter, Drehzaehler, Zahnrad-Trio), exportiert STL/F3D und Vorschaubilder."
+  },
+  "supportedOS": "windows|mac",
+  "editEnabled": true
+}

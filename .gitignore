@@ -1,0 +1,10 @@
+CLAUDE_AUFTRAG.md
+__pycache__/
+models/Mitbringsel/last_run.log
+models/Mitbringsel/nur.txt
+models/Mitbringsel/offen_lassen.txt
+models/Mitbringsel/exportieren.txt
+
+# Merch: erzeugte Druckdateien (STL/3MF/F3D) und Fusion-Logs
+export/
+models/Merch/last_run_*.log
