@@ -23,7 +23,7 @@ KLARNAME = {'weiss': 'Weiss', 'dunkel': 'Experience Green #075033', 'mittel': 'P
 
 # Chip-Satz: derselbe Chip viermal auf einer Platte, je Grundfarbe sind die Farben der Einlagen umgehaengt.
 # Grundfarbe -> {Farbe im Ausgangsmodell (weisser Chip): Farbe im Satz}
-CHIPSATZ_BASIS = 'chip_logo_seit2004'
+CHIPSATZ_BASIS = 'chip_logo_seit1983'
 CHIPSATZ = [
     ('weiss', {'weiss': 'weiss', 'dunkel': 'dunkel', 'mittel': 'mittel'}, (-15.0, 15.0)),
     ('dunkel', {'weiss': 'dunkel', 'dunkel': 'weiss', 'mittel': 'neon'}, (15.0, 15.0)),
@@ -41,7 +41,7 @@ def stl_schreiben(path, tris):
 
 
 def chipsatz():
-    """Schreibt die STLs fuer chipsatz_logo_seit2004 (vier Chips in vier Farbwelten) aus dem weissen Chip."""
+    """Schreibt die STLs fuer chipsatz_logo_seit1983 (vier Chips in vier Farbwelten) aus dem weissen Chip."""
     name = CHIPSATZ_BASIS.replace('chip_', 'chipsatz_')
     for old in glob.glob(os.path.join(MERCH, name + '__*.stl')):
         os.remove(old)

@@ -30,10 +30,10 @@ CHIP = dict(
     frage=7.4,
 )
 
-# (Vorderseite, Rueckseite). Motive mit Emblem: logo, always, shape. Ohne Logo: seit2004, zusammen, unknown, leer.
+# (Vorderseite, Rueckseite). Motive mit Emblem: logo, always, shape. Ohne Logo: seit1983, zusammen, unknown, leer.
 # 'leer' = nur der Randring (fuer die 0,4-mm-Duese die sichere Rueckseite des neutralen Chips).
-PAARE_LOGO = [('logo', 'seit2004'), ('logo', 'always'), ('logo', 'zusammen'), ('logo', 'shape'), ('logo', 'unknown')]
-PAARE_NEUTRAL = [('seit2004', 'zusammen'), ('seit2004', 'unknown'), ('seit2004', 'leer')]
+PAARE_LOGO = [('logo', 'seit1983'), ('logo', 'always'), ('logo', 'zusammen'), ('logo', 'shape'), ('logo', 'unknown')]
+PAARE_NEUTRAL = [('seit1983', 'zusammen'), ('seit1983', 'unknown'), ('seit1983', 'leer')]
 
 
 def _bogenpaar(t, p, oben, unten, farbe):
@@ -62,11 +62,11 @@ def motiv(t, p, key, ring_farbe):
     if key == 'logo':
         k += t.logo('emblem', p['emblem'][0], 0, p['emblem'][1], d)
         k += t.logo('wort', p['wort'][0], 0, p['wort'][1], d)
-    elif key == 'seit2004':
+    elif key == 'seit1983':
         cap, y, mb = p['seit']
         k += t.text('seit', cap, 0, y, d, 'mittel', max_breite=mb)
         cap, y, mb = p['jahr']
-        k += t.text('2004', cap, 0, y, d, 'dunkel', font=M.FONT_BLACK, bold=False, max_breite=mb)
+        k += t.text('1983', cap, 0, y, d, 'dunkel', font=M.FONT_BLACK, bold=False, max_breite=mb)
     elif key == 'zusammen':
         cap, y, mb = p['zus']
         k += t.text('Zusammen', cap, 0, y, d, 'mittel', max_breite=mb)
